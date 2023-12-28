@@ -8,7 +8,7 @@ Demo for next.js with scss
 Clone the project
 
 ```bash
-  git clone https://github.com/hirenace/next-demo-scss.git.git
+  git clone https://github.com/hirenace/next-demo-scss.git
 ```
 
 Go to the project directory
