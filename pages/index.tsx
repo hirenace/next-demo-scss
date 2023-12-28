@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import Header from '../src/components/layout/header';
 import Footer from '../src/components/layout/footer';
@@ -12,11 +13,14 @@ const Home = () => {
                         <h1 className={'card-title'}>Welcome to the Home Page</h1>
                         <p className={'card-text'}>Explore amazing content and discover new things!</p>
                         <p className={'card-footer'}>Thank You</p>
+                        <p className='card-text'><Link href='/product' >Go to Product</Link></p>
+
                     </div>
                 </div>
             </main>
             <Footer />
-        </div>
+        </div >
+
     );
 };
 

@@ -5,6 +5,22 @@ $button-hover-color: #2c3e50;
 $form-border-color: #e2e8f0;
 $error-color: #e53e3e;
 
+
+.d-flex{
+  display: flex;
+}
+
+.margin-auto{
+  margin: 0 auto;
+}
+
+.ml-2{
+  margin-left: 10px;
+}
+
+.mr-2{
+  margin-right: 10px;
+}
 // Header Component Styles
 
 .header {
@@ -120,6 +136,7 @@ body {
   
   .content-wrapper {
     margin-top: 20px;
+    padding: 10px 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -264,7 +281,18 @@ body {
     }
   }
   
-  
-  
-  
-  
+  .edit-button,
+.delete-button {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+}

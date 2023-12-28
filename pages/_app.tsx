@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import '../styles/common.scss'
-import '../styles/global.scss'
 const MyApp = ({ Component, pageProps }) => {
     const router = useRouter();
 
@@ -17,7 +16,7 @@ const MyApp = ({ Component, pageProps }) => {
         }
     }, []);
 
-    return <Component {...pageProps} />;
+    return <Component {...pageProps} />
 }
 
 export default MyApp;
