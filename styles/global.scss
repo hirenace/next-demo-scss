@@ -1,0 +1,45 @@
+
+// CenteredButton Component Styles
+.centered-button-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .centered-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.25rem; // Adjust border-radius as needed
+    transition: background-color 0.3s ease;
+  
+    &:hover {
+      background-color: #3498db; // Adjust hover background color as needed
+    }
+  
+    &:focus {
+      outline: none;
+    }
+  }
+  
+// CenteredInput Component Styles
+
+.centered-input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e2e8f0; // Adjust border color as needed
+    border-radius: 0.25rem; // Adjust border-radius as needed
+    outline: none;
+    transition: border-color 0.3s ease;
+  
+    &:focus {
+      border-color: #3498db; // Adjust focus border color as needed
+    }
+  }
+  
+  
+  
