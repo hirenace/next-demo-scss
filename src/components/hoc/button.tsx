@@ -2,7 +2,7 @@
 import React from 'react';
 
 interface CenteredButtonProps {
-    onClick: () => void;
+    onClick?: () => void;
     className: string;
     type: "button" | "submit" | "reset" | undefined;
     buttonText: string;

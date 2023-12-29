@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import '../styles/common.scss'
+import '../styles/global.scss'
+
 const MyApp = ({ Component, pageProps }) => {
     const router = useRouter();
 

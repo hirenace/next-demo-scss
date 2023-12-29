@@ -75,7 +75,7 @@ const Login = () => {
                         placeholder={username_placeholder}
                         name={'username'}
                         value={allValue?.username}
-                        onChange={(e) => handle.onChangeField(e, 'username')}
+                        onChange={(e) => handle.onChangeField(e.target.value, 'username')}
                         className={'centered-input'}
                     />
                 </div>
@@ -85,7 +85,7 @@ const Login = () => {
                         name={'password'}
                         placeholder={password_placeholder}
                         value={allValue?.password}
-                        onChange={(e) => handle.onChangeField(e, 'password')}
+                        onChange={(e) => handle.onChangeField(e.target.value, 'password')}
                         className={'centered-input'}
                     />
                 </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import CenteredButton from '../../src/components/hoc/button';
 import Link from 'next/link';
@@ -6,6 +7,7 @@ import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
 
 const Product = () => {
+    const router = useRouter()
     const rows: GridRowsProp = [
         { id: 1, name: 'Apple', price: '$150', location: "Ahmadabad" },
         { id: 2, name: 'Samsung', price: '$20', location: "Surat" },
@@ -33,6 +35,7 @@ const Product = () => {
     const handleEdit = (row) => {
         // Handle edit action
         console.log('Edit:', row);
+        router.push(`/product/form/${row?.id}`)
     };
 
     const handleDelete = (row) => {
@@ -42,6 +45,7 @@ const Product = () => {
 
     function handleAdd(): void {
         console.log('Add:');
+        router.push('/product/form')
     }
 
     return (
