@@ -1,0 +1,19 @@
+@import 'variables';
+
+  // Footer Component Styles
+
+  .footer {
+    background-color: $primary-color; // Use your desired color for the background
+    color: $while-color; // Use your desired text color
+    padding: 1rem; // Adjust padding as needed
+    margin-top: auto; // Set margin-top to push the footer to the bottom
+  
+    .container {
+      margin: 0 auto;
+    }
+  
+    p {
+      margin: 0; // Remove default margin for the paragraph
+      text-align: center; // Adjust text alignment as needed
+    }
+  }

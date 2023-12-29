@@ -1,0 +1,66 @@
+@import 'variables';
+// Header Component Styles
+.header {
+    background-color: $primary-color; // Use your desired color for the background
+    color: $while-color; // Use your desired text color
+    padding: 1rem; // Adjust padding as needed
+  
+    .container {
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    h1 {
+      font-size: 1.5rem; // Adjust font size as needed
+      font-weight: bold;
+    }
+  
+    .user-info {
+      display: flex;
+      align-items: center;
+  
+      .welcome-message {
+        margin-right: 0.5rem; // Adjust margin as needed
+      }
+  
+      .logout-button {
+        color: $while-color;
+        font-size: 16px;
+        text-decoration: none;
+        background-color: $primary-color; // Use your desired button background color
+        border: none;
+        border-radius: 0.25rem; // Adjust border-radius as needed
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      
+        &:focus {
+          outline: none;
+        }
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+  
+      .login-button {
+        text-decoration: none;
+        cursor: pointer;
+        font-size: 16px;
+        background-color: $primary-color; // Use your desired button background color
+        border: none;
+        border-radius: 0.25rem; // Adjust border-radius as needed
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      
+        &:focus {
+          outline: none;
+        }
+  
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }

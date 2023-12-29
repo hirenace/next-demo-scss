@@ -1,3 +1,5 @@
+@import 'variables';
+
 .home-container {
     display: flex;
     flex-direction: column;
@@ -21,7 +23,6 @@
       select,
       button {
         width: 100%;
-        padding: 8px;
         margin-top: 5px;
         box-sizing: border-box;
       }
@@ -43,30 +44,24 @@
           margin-bottom: 5px;
         }
   
-        input {
-          width: calc(50% - 5px);
-          margin-right: 10px;
-        }
-  
         &:last-child {
           margin-bottom: 0;
         }
       }
   
       button {
-        background-color: #007bff;
-        color: #fff;
+        color: $while-color;
         border: none;
-        padding: 8px;
         cursor: pointer;
       }
     }
   
     button[type="submit"] {
       background-color: #28a745;
-      color: #fff;
+      color: $while-color;
       border: none;
       padding: 10px;
       cursor: pointer;
+      margin-bottom: 15px;
     }
   }

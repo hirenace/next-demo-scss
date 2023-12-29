@@ -1,45 +1,242 @@
+// Include our modal styles
+@import 'modal.scss';
+
+// Include our modal styles
+@import 'product.scss';
+
+// Include our header styles
+@import 'header.scss';
+
+// Include our footer styles
+@import 'footer.scss';
+
+// Include our auth styles
+@import 'auth.scss';
+
+body {
+  margin: 0;
+  font-size: $bs-body-font-size;
+  color: $bs-body-color;
+  background: $bs-body-bg;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+main {
+  flex: 1;
+  background-color: $light-white-color;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.d-flex{
+  display: flex;
+}
+.justify-content-center{
+  justify-content: center;
+}
+
+.margin-auto{
+  margin: 0 auto;
+}
+
+.mt-2{
+  margin-top: 10px;
+}
+
+.mb-2{
+  margin-bottom: 10px;
+}
+
+.ml-2{
+  margin-left: 10px;
+}
+
+.mr-2{
+  margin-right: 10px;
+}
+
+.error-message {
+  color: $error-color; // Use your desired error message color
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+}
+
+.content-wrapper {
+  margin-top: 20px;
+  padding: 10px 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: $while-color;
+  border-radius: 0.375rem; // Adjust border-radius as needed
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #2d3748; // Adjust text color as needed
+}
+
+.card-text {
+  text-align: center;
+  color: $secondary-color; // Adjust text color as needed
+}
+
+.card-footer {
+  font-weight: bold;
+  text-align: center;
+  color: $secondary-color; // Adjust text color as needed
+}
+
 
 // CenteredButton Component Styles
-.centered-button-container {
-    display: flex;
-    justify-content: center;
+.centered-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: $primary-color; // Use your desired button background color
+  color: $while-color; // Use your desired button text color
+  border: none;
+  border-radius: 0.25rem; // Adjust border-radius as needed
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $button-hover-color; // Adjust hover background color as needed
   }
-  
-  .centered-button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.centered-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.25rem; // Adjust border-radius as needed
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $primary-color; // Adjust hover background color as needed
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+
+  .edit-button,
+  .delete-button {
+    background-color: #3498db;
+    color: $while-color;
     border: none;
-    border-radius: 0.25rem; // Adjust border-radius as needed
-    transition: background-color 0.3s ease;
-  
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+
     &:hover {
-      background-color: #3498db; // Adjust hover background color as needed
-    }
-  
-    &:focus {
-      outline: none;
+      background-color: #2980b9;
     }
   }
-  
+
 // CenteredInput Component Styles
 
-.centered-input {
+  .centered-input {
     width: 100%;
     padding: 1rem;
     margin-bottom: 1rem;
-    border: 1px solid #e2e8f0; // Adjust border color as needed
+    border: 1px solid $form-border-color; // Adjust border color as needed
     border-radius: 0.25rem; // Adjust border-radius as needed
     outline: none;
     transition: border-color 0.3s ease;
-  
+
     &:focus {
-      border-color: #3498db; // Adjust focus border color as needed
+      border-color: $primary-color; // Adjust focus border color as needed
     }
   }
+
+// Dropdown.scss
+  .dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  .dropdown-select {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid $form-border-color; // Adjust border color as needed
+    border-radius: 0.25rem; // Adjust border-radius as needed
+    outline: none;
+    appearance: none; /* Remove default arrow in modern browsers */
+    background-size: 20px 20px; /* Adjust arrow icon size as needed */
+    cursor: pointer;
+  }
+
+/* Additional styles for the dropdown options */
+  .dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid $form-border-color; // Adjust border color as needed
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem; // Adjust border-radius as needed
+    z-index: 1;
+    background-color: $while-color; // Adjust background color as needed
+
+    .option {
+      padding: 0.5rem;
+      cursor: pointer;
+      // transition: background-color 0.3s ease;
+
+      &:hover {
+        // background-color: $primary-color; // Adjust hover background color as needed
+      }
+    }
+  }
+
+// Home Component Styles
+
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; // Ensure the container takes at least the full viewport height
+  }
+
+  .home-header {
+    // Include styles from the Header component, assuming it has a class name of 'header'
+    @extend .header;
+  }
+
+  .home-footer {
+    // Include styles from the Footer component, assuming it has a class name of 'footer'
+    @extend .footer;
+  }
   
-  
+    
+   
   

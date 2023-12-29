@@ -5,9 +5,14 @@ import CenteredButton from '../../src/components/hoc/button';
 import Link from 'next/link';
 import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
+import { useState } from 'react';
+import Modal from '../../src/components/hoc/modal';
 
 const Product = () => {
     const router = useRouter()
+    const [isModalOpen, setModalOpen] = useState(false);
+
+
     const rows: GridRowsProp = [
         { id: 1, name: 'Apple', price: '$150', location: "Ahmadabad" },
         { id: 2, name: 'Samsung', price: '$20', location: "Surat" },
@@ -32,6 +37,14 @@ const Product = () => {
         },
     ];
 
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
     const handleEdit = (row) => {
         // Handle edit action
         console.log('Edit:', row);
@@ -40,6 +53,7 @@ const Product = () => {
 
     const handleDelete = (row) => {
         // Handle delete action
+        openModal()
         console.log('Delete:', row);
     };
 
@@ -47,6 +61,12 @@ const Product = () => {
         console.log('Add:');
         router.push('/product/form')
     }
+
+    const handleSubmit = () => {
+        // Handle the submit action here
+        console.log('Submit clicked!');
+        closeModal(); // You can close the modal after submitting if needed
+    };
 
     return (
         <div className={'home-container'}>
@@ -65,6 +85,11 @@ const Product = () => {
                     disableColumnSelector />
             </main>
             <Footer />
+            {isModalOpen &&
+                <Modal isOpen={isModalOpen} onClose={closeModal} header={<h2>Confirm!</h2>} onSubmit={handleSubmit}>
+                    <p>Are you sure? You want to delete this record</p>
+                </Modal>
+            }
         </div >
     )
 }
