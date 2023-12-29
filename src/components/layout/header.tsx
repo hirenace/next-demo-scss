@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { getFullName } from '../../utils/function/common';
+import CenteredButton from '../hoc/button';
 
 const Header = () => {
     const router = useRouter();
-    const [userName, setUserName] = useState(null);
+    const [userName, setUserName] = useState<string | null>(null);
 
     useEffect(() => {
         const userToken = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
@@ -30,12 +31,20 @@ const Header = () => {
                 {userName !== null ? (
                     <div className={'user-info'}>
                         <span className={'welcome-message'}>Welcome, {userName}</span>
-                        <button className={'logout-button'} onClick={handleLogout}>
-                            Logout
-                        </button>
+                        <CenteredButton
+                            onClick={() => handleLogout()}
+                            className={'centered-button logout-button'}
+                            type={"button"}
+                            buttonText={"Logout"}
+                        />
                     </div>
                 ) : (
-                    <button className={'login-button'}>Login</button>
+                    <CenteredButton
+                        className={'centered-button login-button'}
+                        type={"button"}
+                        buttonText={"Login"}
+                    />
+
                 )}
             </div>
         </header>

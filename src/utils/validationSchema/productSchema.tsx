@@ -8,8 +8,8 @@ interface Location {
 }
 
 const productSchema = yup.object().shape({
-  Name: yup.string().required('Product Name is required'),
-  Type: yup.string().required('Product Type is required'),
+  productName: yup.string().required('Product Name is required'),
+  productType: yup.string().required('Product Type is required'),
   locations: yup.array().of(
     yup.object().shape({
       name: yup.string().required('Location Name is required'),

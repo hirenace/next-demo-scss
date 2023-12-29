@@ -76,6 +76,7 @@ const AddProduct: React.FC = () => {
                     locations: allValue.locations,
                     document: allValue.document,
                 });
+                setError({});
             } catch (error) {
                 // Handle validation errors
                 console.error('Validation error:', error.errors);
