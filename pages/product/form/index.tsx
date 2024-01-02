@@ -8,7 +8,8 @@ import CenteredInput from '../../../src/components/hoc/input';
 import CenteredButton from '../../../src/components/hoc/button';
 import globalMessages from '../../../src/utils/globalization';
 import productSchema from '../../../src/utils/validationSchema/productSchema';
-import { addProduct, editProduct, getParticularProduct } from '../../../src/services/apis';
+import { addProduct, deleteImage, editProduct, getParticularProduct } from '../../../src/services/apis';
+import Image from 'next/image';
 
 interface Location {
     location_id: string;
@@ -20,8 +21,9 @@ interface FormValues {
     productName: string;
     productType: string;
     locations: any;
-    document: File | null;
+    document: any | null;
     product_location_id?: number
+    images?: string
 }
 
 const AddProduct: React.FC = () => {
@@ -29,7 +31,7 @@ const AddProduct: React.FC = () => {
 
     const params = useParams()
     const { title, name_placeholder, product_type, locations_place, location_price, location_quantity, add_location_btn, delete_location_btn, submit_button_text } = globalMessages?.product_form;
-
+    const [showImage, setShowImage] = useState<any>();
     const [allValue, setAllValue] = useState<FormValues>({
         productName: '',
         productType: '',
@@ -53,6 +55,7 @@ const AddProduct: React.FC = () => {
                 productName: product?.name,
                 productType: product?.type,
                 locations: product?.locations,
+                images: product?.images[0]?.image,
             })
         }
     }
@@ -83,9 +86,18 @@ const AddProduct: React.FC = () => {
                 ),
             }));
         },
-        imageChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file = event.target.files?.[0];
-
+        imageChange: async (event: React.ChangeEvent<HTMLInputElement>) => {
+            const file: any = event.target.files?.[0];
+            if (params?.slug) {
+                let response: any = await deleteImage(Number(12))
+                if (response) {
+                    setAllValue((prevValues) => ({
+                        ...prevValues,
+                        document: ''
+                    }));
+                }
+            }
+            setShowImage(URL.createObjectURL(file))
             setAllValue((prevValues) => ({
                 ...prevValues,
                 document: file || null,
@@ -109,16 +121,16 @@ const AddProduct: React.FC = () => {
                 let response: object | any;
 
                 console.log('allValue.product_location_id,', allValue.product_location_id);
-
-                if (params?.slug) {
+                let ids: any = Number(params.slug)
+                if (ids) {
                     const locationsWithId = allValue?.locations.map((location) => ({
                         ...location,
                         product_location_id: location.product_location_id,
                     }));
-                    console.log('locationsWithId', locationsWithId);
+                    formData.append('product_id', ids);
 
                     formData.append('locations', JSON.stringify(locationsWithId));
-                    response = await editProduct(Number(params?.slug), formData);
+                    response = await editProduct(ids, formData);
                     if (response) toast.success(response?.message)
                 } else {
                     formData.append('locations', JSON.stringify(allValue?.locations));
@@ -232,6 +244,26 @@ const AddProduct: React.FC = () => {
                         onChange={(e: any) => handle.imageChange(e)}
                         className={'centered-input mt-2'}
                     />
+
+                    {showImage &&
+                        <div className="signature-block" onClick={() => window.open(showImage, "_blank")} >
+                            <Image src={showImage} alt="docs"
+                                width={215}
+                                height={55}
+                                className="mx-auto"
+                            />
+                        </div>
+                    }
+
+                    {!showImage ? allValue?.images &&
+                        <div className="signature-block" onClick={() => window.open(`http://localhost:5000/public/document/${allValue?.images}`, "_blank")} >
+                            <Image src={`http://localhost:5000/public/document/${allValue?.images}`} alt="docs"
+                                width={215}
+                                height={55}
+                                className="mx-auto"
+                            />
+                        </div>
+                        : ""}
 
 
                     {Object?.keys(error).length > 0 && (

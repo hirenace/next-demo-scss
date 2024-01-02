@@ -8,6 +8,7 @@ import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
 import Modal from '../../src/components/hoc/modal';
 import { deleteProduct, fetchProductData } from '../../src/services/apis';
+import Image from 'next/image';
 
 
 const locationArray = [{
@@ -39,6 +40,20 @@ const Product = () => {
     }
 
     const columns: GridColDef[] = [
+        {
+            field: 'images', headerName: 'Image', width: 80, sortable: false,
+            renderCell: (params) => (
+                <div className="signature-block">{
+                    params?.value[0]?.image ?
+                        <Image src={`http://localhost:5000/public/document/${params?.value[0]?.image}`} alt="docs"
+                            onClick={() => window.open(`http://localhost:5000/public/document/${params?.value[0]?.image}`, "_blank")}
+                            width={55}
+                            height={55}
+                            className="mx-auto"
+                        /> : '-'}
+                </div>
+            )
+        },
         { field: 'name', headerName: 'Name', width: 200, sortable: false },
         { field: 'type', headerName: ' Product Type', width: 150, sortable: false },
         {

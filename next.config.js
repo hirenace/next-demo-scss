@@ -4,9 +4,7 @@ const nextConfig = {
     poweredByHeader: false,
     distDir: "build",    
     images: {
-        domains: [
-          ""
-        ],
+      domains: ['localhost'],
       },
 }
 

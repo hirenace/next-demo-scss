@@ -68,3 +68,13 @@ export const editProduct = async (id: number, body: any) => {
         toast.error(error.response?.data?.message)
     }
 }
+
+export const deleteImage = async (id: number) => {
+    try {
+        const response = await axiosInstance.delete(`/productImages/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        // Handle errors
+        toast.error(error.response?.data?.message)
+    }
+}
