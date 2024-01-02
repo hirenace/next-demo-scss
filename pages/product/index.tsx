@@ -1,26 +1,68 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { toast } from "react-toastify";
 import CenteredButton from '../../src/components/hoc/button';
 import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
 import Modal from '../../src/components/hoc/modal';
+import { deleteProduct, fetchProductData } from '../../src/services/apis';
+
+
+const locationArray = [{
+    location_id: 1,
+    name: 'Bensalem'
+},
+{
+    location_id: 2,
+    name: 'Ivyland'
+}, {
+    location_id: 3,
+    name: 'Crydon'
+}]
 
 const Product = () => {
     const router = useRouter()
     const [isModalOpen, setModalOpen] = useState(false);
+    const [productList, setProductList] = useState<any>([]);
+    const [isDeletedIds, setIsDeletedIds] = useState<number>(null);
 
-    const rows: GridRowsProp = [
-        { id: 1, name: 'Apple', price: '$150', location: "Ahmadabad" },
-        { id: 2, name: 'Samsung', price: '$20', location: "Surat" },
-        { id: 3, name: 'MUI', price: '$30', location: "Vadodara" },
-    ];
+    useEffect(() => {
+        fetchProduct()
+    }, [])
+
+    const fetchProduct = async () => {
+        const getProduct: any = await fetchProductData()
+        const newArray = getProduct.map((obj) => ({ ...obj, id: obj?.product_id })); // added the id key because MUI table must be needed id fields
+        setProductList(newArray)
+    }
 
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Name', width: 150, sortable: false },
-        { field: 'price', headerName: 'Price', width: 150, sortable: false },
-        { field: 'location', headerName: 'Location', width: 150, sortable: false },
+        { field: 'name', headerName: 'Name', width: 200, sortable: false },
+        { field: 'type', headerName: ' Product Type', width: 150, sortable: false },
+        {
+            field: 'locations',
+            headerName: 'Locations',
+            width: 300,
+            renderCell: (params) => (
+                <div>
+                    {
+                        params.value.map((location) => {
+                            const matchingLocation = locationArray.find(
+                                (item) => item.location_id === location.location_id
+                            );
+
+                            return (
+                                <div key={location.locationId}>
+                                    {matchingLocation ? matchingLocation.name : 'Unknown Location'} - Price: ${location.price}, Quantity: {location.quantity}
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+            ),
+        },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -29,27 +71,30 @@ const Product = () => {
             renderCell: (params) => (
                 <div>
                     <button className={'edit-button'} onClick={() => handle.edit(params.row)}>Edit</button>
-                    <button className={'delete-button'} onClick={() => handleDelete(params.row)}>Delete</button>
+                    <button className={'delete-button'} onClick={() => handle.delete(params.row)}>Delete</button>
                 </div>
             ),
         },
     ];
 
-    const handleDelete = (row) => {
-        // Handle delete action
-        console.log('Delete:', row);
-        handle.openModal()
-    };
-
     const handle = {
-        submit: () => {
+        submit: async () => {
             // Handle the submit action here
-            console.log('Submit clicked!');
-            handle.closeModal(); // You can close the modal after submitting if needed
+            const deletedProduct: any = await deleteProduct(isDeletedIds)
+            if (deletedProduct) {
+                toast.success(deletedProduct?.message);
+                setProductList(productList?.filter(item => item.id !== isDeletedIds))
+                handle.closeModal(); // You can close the modal after submitting if needed
+            }
         },
         edit: (row) => {
             // Handle edit action
             router.push(`/product/form/${row?.id}`)
+        },
+        delete: (row) => {
+            // Handle delete action
+            setIsDeletedIds(row?.id)
+            handle.openModal()
         },
         closeModal: () => {
             setModalOpen(false);
@@ -69,7 +114,7 @@ const Product = () => {
                     <p className='margin-auto'><Link href={'/'}>Go back</Link></p>
                 </div>
                 <DataGrid
-                    rows={rows}
+                    rows={productList || 0}
                     columns={columns}
                     disableColumnMenu
                     disableColumnFilter

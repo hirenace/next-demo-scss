@@ -1,11 +1,14 @@
 // AddProduct.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import Footer from '../../../src/components/layout/footer';
 import Header from '../../../src/components/layout/header';
 import CenteredInput from '../../../src/components/hoc/input';
 import CenteredButton from '../../../src/components/hoc/button';
 import globalMessages from '../../../src/utils/globalization';
 import productSchema from '../../../src/utils/validationSchema/productSchema';
+import { addProduct, editProduct, getParticularProduct } from '../../../src/services/apis';
 
 interface Location {
     name: string;
@@ -16,22 +19,41 @@ interface Location {
 interface FormValues {
     productName: string;
     productType: string;
-    locations: Location[];
+    locations: any;
     document: File | null;
 }
 
 const AddProduct: React.FC = () => {
+    const router = useRouter();
+
+    const params = useParams()
     const { title, name_placeholder, product_type, locations_place, location_price, location_quantity, add_location_btn, delete_location_btn, submit_button_text } = globalMessages?.product_form;
 
     const [allValue, setAllValue] = useState<FormValues>({
         productName: '',
         productType: '',
-        locations: [{ name: '', price: 0, quantity: 0 }],
+        locations: [{ location_id: '', price: null, quantity: null }],
         document: null,
     });
 
     const [error, setError] = useState<any>([]);
 
+
+    useEffect(() => {
+        if (params?.slug) getProduct()
+    }, [params?.slug])
+
+    const getProduct = async () => {
+        let product: object | any = await getParticularProduct(Number(params?.slug))
+        if (product) {
+            setAllValue({
+                ...allValue,
+                productName: product?.name,
+                productType: product?.type,
+                locations: product?.locations,
+            })
+        }
+    }
     const handle = {
         onChangeField: (value: any, name: string) => {
             setAllValue((prevValues) => ({
@@ -42,7 +64,7 @@ const AddProduct: React.FC = () => {
         locationAdd: () => {
             setAllValue((prevValues) => ({
                 ...prevValues,
-                locations: [...prevValues.locations, { name: '', price: 0, quantity: 0 }],
+                locations: [...prevValues.locations, { location_id: '', price: null, quantity: null }],
             }));
         },
         locationDelete: (indexToDelete: number) => {
@@ -70,19 +92,34 @@ const AddProduct: React.FC = () => {
             event.preventDefault();
             try {
                 await productSchema.validate(allValue, { abortEarly: false });
-                console.log('Form is valid');
-                console.log('allValue.productName:', allValue.productName);
-                console.log({
-                    locations: allValue.locations,
-                    document: allValue.document,
-                });
+                const formData = new FormData();
+
+                formData.append('name', allValue.productName);
+                formData.append('type', allValue.productType);
+
+                formData.append('locations', JSON.stringify(allValue.locations));
+
+
+                if (allValue.document) {
+                    formData.append('documents', allValue.document);
+                }
+                let currentDate = new Date();
+                formData.append('created_at', currentDate.toString());
+                formData.append('updated_at', currentDate.toString());
+                let response: object | any;
+                if (params?.slug) {
+                    response = await editProduct(Number(params?.slug), formData);
+                    if (response) toast.success(response?.message)
+                } else {
+                    response = await addProduct(formData);
+                    if (response) toast.success(response?.message)
+                }
+                if (response) router.push('/product')
                 setError({});
             } catch (error) {
                 // Handle validation errors
-                console.error('Validation error:', error.errors);
-
                 // Set validation errors in state
-                const errors = error.inner.reduce((acc, err) => {
+                const errors = error?.inner?.reduce((acc, err) => {
                     acc[err.path] = err.message;
                     return acc;
                 }, {});
@@ -90,9 +127,6 @@ const AddProduct: React.FC = () => {
             }
         },
     };
-
-    console.log('error', error);
-
 
     return (
         <div className="home-container">
@@ -145,14 +179,14 @@ const AddProduct: React.FC = () => {
                                     <span>{locations_place} {index + 1}</span>
                                     <div className="dropdown">
                                         <select
-                                            value={location.name}
-                                            onChange={(e) => handle.locationChange(index, 'name', e.target.value)}
+                                            value={location.location_id}
+                                            onChange={(e) => handle.locationChange(index, 'location_id', e.target.value)}
                                             className="dropdown-select"
                                         >
-                                            <option value="0">Select {locations_place}</option>
-                                            <option value="1">Bensalem</option>
-                                            <option value="2">Ivyland</option>
-                                            <option value="3">Crydon</option>
+                                            <option value={0}>Select {locations_place}</option>
+                                            <option value={1}>Bensalem</option>
+                                            <option value={2}>Ivyland</option>
+                                            <option value={3}>Crydon</option>
                                         </select>
                                     </div>
                                 </label>
@@ -187,11 +221,11 @@ const AddProduct: React.FC = () => {
                     />
 
 
-                    {Object.keys(error).length > 0 && (
+                    {Object?.keys(error).length > 0 && (
                         <div className="validation-error">
                             {Object.entries(error).map(([field, error]) => (
                                 <p role="alert" className={'error-message'}>
-                                    {`${field}: ${error}`}
+                                    {` ${error}`}
                                 </p>
                             ))}
                         </div>

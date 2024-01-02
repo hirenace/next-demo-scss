@@ -3,3 +3,4 @@ pnpm-lock.yaml
 .next
 build
 next-env.d.ts
+.env

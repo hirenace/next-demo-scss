@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import globalMessages from '../../src/utils/globalization';
 import CenteredInput from '../../src/components/hoc/input';
 import CenteredButton from '../../src/components/hoc/button';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [allValue, setAllValue] = useState({
@@ -47,13 +48,13 @@ const Login = () => {
                     body: JSON.stringify({
                         username: allValue?.username,
                         password: allValue?.password,
-                        expiresInMins: 60,
                     }),
                 });
 
                 const data = await response.json();
                 if (response.ok) {
                     // Redirect to the home page after successful login
+                    toast.success("Login Successfully.")
                     localStorage.setItem('user', JSON.stringify(data));
                     router.push('/');
                 } else {

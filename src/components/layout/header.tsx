@@ -27,7 +27,7 @@ const Header = () => {
     return (
         <header className={"header"}>
             <div className={"container"}>
-                <h1 className={"title"}>Next.js With SCSS</h1>
+                <h1 className={"title"} onClick={() => router.push('/')}>Next.js With SCSS</h1>
                 {userName !== null ? (
                     <div className={'user-info'}>
                         <span className={'welcome-message'}>Welcome, {userName}</span>
@@ -47,7 +47,7 @@ const Header = () => {
 
                 )}
             </div>
-        </header>
+        </header >
     );
 };
 

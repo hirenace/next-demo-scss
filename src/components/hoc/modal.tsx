@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children, onSubm
                                     onClick={onSubmit}
                                     className={'centered-button submit-btn mr-2'}
                                     type={"submit"}
-                                    buttonText={"Submit"}
+                                    buttonText={"Yes"}
                                 />
 
                             )}
@@ -35,7 +35,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, header, children, onSubm
                                 onClick={onClose}
                                 className={'centered-button close-btn'}
                                 type={"submit"}
-                                buttonText={"Close"}
+                                buttonText={"No"}
                             />
 
                         </div>

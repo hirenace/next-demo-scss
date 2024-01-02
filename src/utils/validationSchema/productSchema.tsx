@@ -12,7 +12,7 @@ const productSchema = yup.object().shape({
   productType: yup.string().required('Product Type is required'),
   locations: yup.array().of(
     yup.object().shape({
-      name: yup.string().required('Location Name is required'),
+      location_id: yup.string().required('Location Name is required'),
       price: yup.number().required('Price is required').positive('Price must be positive'),
       quantity: yup.number().required('Quantity is required').positive('Quantity must be positive'),
     })

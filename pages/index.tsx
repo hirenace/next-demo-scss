@@ -1,9 +1,19 @@
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import React from 'react';
+
 import Header from '../src/components/layout/header';
 import Footer from '../src/components/layout/footer';
 
 const Home = () => {
+    const router = useRouter();
+    const userToken: any | null = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : null;
+
+    useEffect(() => {
+        if (userToken === null) {
+            return router.push('/auth/login');
+        }
+    }, [])
     return (
         <div className={'home-container'}>
             <Header />
