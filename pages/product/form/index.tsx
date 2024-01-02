@@ -11,7 +11,7 @@ import productSchema from '../../../src/utils/validationSchema/productSchema';
 import { addProduct, editProduct, getParticularProduct } from '../../../src/services/apis';
 
 interface Location {
-    name: string;
+    location_id: string;
     price: number;
     quantity: number;
 }
@@ -21,6 +21,7 @@ interface FormValues {
     productType: string;
     locations: any;
     document: File | null;
+    product_location_id?: number
 }
 
 const AddProduct: React.FC = () => {
@@ -45,6 +46,7 @@ const AddProduct: React.FC = () => {
 
     const getProduct = async () => {
         let product: object | any = await getParticularProduct(Number(params?.slug))
+
         if (product) {
             setAllValue({
                 ...allValue,
@@ -83,6 +85,7 @@ const AddProduct: React.FC = () => {
         },
         imageChange: (event: React.ChangeEvent<HTMLInputElement>) => {
             const file = event.target.files?.[0];
+
             setAllValue((prevValues) => ({
                 ...prevValues,
                 document: file || null,
@@ -93,24 +96,32 @@ const AddProduct: React.FC = () => {
             try {
                 await productSchema.validate(allValue, { abortEarly: false });
                 const formData = new FormData();
+                let currentDate = new Date();
 
                 formData.append('name', allValue.productName);
                 formData.append('type', allValue.productType);
 
-                formData.append('locations', JSON.stringify(allValue.locations));
-
-
                 if (allValue.document) {
                     formData.append('documents', allValue.document);
                 }
-                let currentDate = new Date();
                 formData.append('created_at', currentDate.toString());
                 formData.append('updated_at', currentDate.toString());
                 let response: object | any;
+
+                console.log('allValue.product_location_id,', allValue.product_location_id);
+
                 if (params?.slug) {
+                    const locationsWithId = allValue?.locations.map((location) => ({
+                        ...location,
+                        product_location_id: location.product_location_id,
+                    }));
+                    console.log('locationsWithId', locationsWithId);
+
+                    formData.append('locations', JSON.stringify(locationsWithId));
                     response = await editProduct(Number(params?.slug), formData);
                     if (response) toast.success(response?.message)
                 } else {
+                    formData.append('locations', JSON.stringify(allValue?.locations));
                     response = await addProduct(formData);
                     if (response) toast.success(response?.message)
                 }
@@ -151,7 +162,7 @@ const AddProduct: React.FC = () => {
 
                     <label>
                         <select value={allValue?.productType} className="dropdown-select" onChange={(e) => handle.onChangeField(e.target.value, 'productType')}>
-                            <option value="0">Select {product_type}</option>
+                            <option value="0" >Select {product_type}</option>
                             <option value="unit">Unit</option>
                             <option value="type">Type</option>
                         </select>
@@ -216,6 +227,8 @@ const AddProduct: React.FC = () => {
                         type="file"
                         placeholder={"Image:"}
                         name={'document'}
+                        accept="image/*"
+                        multiple
                         onChange={(e: any) => handle.imageChange(e)}
                         className={'centered-input mt-2'}
                     />

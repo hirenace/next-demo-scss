@@ -34,7 +34,7 @@ const Product = () => {
 
     const fetchProduct = async () => {
         const getProduct: any = await fetchProductData()
-        const newArray = getProduct.map((obj) => ({ ...obj, id: obj?.product_id })); // added the id key because MUI table must be needed id fields
+        const newArray = getProduct?.map((obj) => ({ ...obj, id: obj?.product_id })); // added the id key because MUI table must be needed id fields
         setProductList(newArray)
     }
 
