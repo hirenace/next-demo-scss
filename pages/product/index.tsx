@@ -26,7 +26,7 @@ const Product = () => {
     const router = useRouter()
     const [isModalOpen, setModalOpen] = useState(false);
     const [productList, setProductList] = useState<any>([]);
-    const [isDeletedIds, setIsDeletedIds] = useState<number>(null);
+    const [isDeletedIds, setIsDeletedIds] = useState<number | null>(null);
 
     useEffect(() => {
         fetchProduct()
@@ -80,7 +80,7 @@ const Product = () => {
     const handle = {
         submit: async () => {
             // Handle the submit action here
-            const deletedProduct: any = await deleteProduct(isDeletedIds)
+            const deletedProduct: any = await deleteProduct(Number(isDeletedIds))
             if (deletedProduct) {
                 toast.success(deletedProduct?.message);
                 setProductList(productList?.filter(item => item.id !== isDeletedIds))
