@@ -241,6 +241,17 @@ main {
   //table
   .MuiDataGrid-overlayWrapper.css-ql19fo-MuiDataGrid-overlayWrapper {
     height: 50px !important;
-}
-   
-  
+  }
+    
+    
+  .close-icon {
+    // position: absolute; // Adjust the positioning as needed
+    top: 0;
+    right: 0;
+    background-color: transparent;
+    border: none;
+    color: #000; // Set the color of the close icon
+    font-size: 16px; // Adjust the font size as needed
+    cursor: pointer;
+    padding: 5px; // Adjust the padding as needed
+  }

@@ -23,6 +23,7 @@ const locationArray = [{
     name: 'Crydon'
 }]
 
+let serialNumberCounter = 0;
 const Product = () => {
     const router = useRouter()
     const [isModalOpen, setModalOpen] = useState(false);
@@ -40,6 +41,13 @@ const Product = () => {
     }
 
     const columns: GridColDef[] = [
+        {
+            field: 'product_id', headerName: '#', width: 50, sortable: false,
+            renderCell: (params) => {
+                const rowIndex = productList.indexOf(params.row) + 1;
+                return <>{rowIndex}</>;
+            },
+        },
         {
             field: 'images', headerName: 'Image', width: 80, sortable: false,
             renderCell: (params) => (

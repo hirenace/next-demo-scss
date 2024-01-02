@@ -23,7 +23,7 @@ interface FormValues {
     locations: any;
     document: any | null;
     product_location_id?: number
-    images?: string
+    images?: any
 }
 
 const AddProduct: React.FC = () => {
@@ -37,6 +37,7 @@ const AddProduct: React.FC = () => {
         productType: '',
         locations: [{ location_id: '', price: null, quantity: null }],
         document: null,
+        images: []
     });
 
     const [error, setError] = useState<any>([]);
@@ -55,7 +56,7 @@ const AddProduct: React.FC = () => {
                 productName: product?.name,
                 productType: product?.type,
                 locations: product?.locations,
-                images: product?.images[0]?.image,
+                images: product?.images,
             })
         }
     }
@@ -88,23 +89,26 @@ const AddProduct: React.FC = () => {
         },
         imageChange: async (event: React.ChangeEvent<HTMLInputElement>) => {
             const file: any = event.target.files?.[0];
-            if (params?.slug) {
-                let response: any = await deleteImage(Number(12))
-                if (response) {
-                    setAllValue((prevValues) => ({
-                        ...prevValues,
-                        document: ''
-                    }));
-                }
-            }
             setShowImage(URL.createObjectURL(file))
             setAllValue((prevValues) => ({
                 ...prevValues,
                 document: file || null,
             }));
         },
-        submit: async (event: React.FormEvent) => {
-            event.preventDefault();
+        deleteImages: async (e, id) => {
+            e.preventDefault();
+            if (params?.slug) {
+                let response = await deleteImage(Number(id))
+                if (response) {
+                    allValue?.images?.filter((item: any) => item.product_image_id !== id)
+                    setAllValue(() => ({
+                        ...allValue,
+                        images: allValue?.images?.filter((item: any) => item.product_image_id !== id),
+                    }));
+                }
+            }
+        },
+        submit: async () => {
             try {
                 await productSchema.validate(allValue, { abortEarly: false });
                 const formData = new FormData();
@@ -156,7 +160,7 @@ const AddProduct: React.FC = () => {
             <Header />
             <main className="main">
                 <h1 className="text-center">{title} </h1>
-                <form className="add-product-form" onSubmit={handle.submit}>
+                <form className="add-product-form">
                     <CenteredInput
                         type="text"
                         placeholder={name_placeholder}
@@ -255,14 +259,23 @@ const AddProduct: React.FC = () => {
                         </div>
                     }
 
+
+
                     {!showImage ? allValue?.images &&
-                        <div className="signature-block" onClick={() => window.open(`http://localhost:5000/public/document/${allValue?.images}`, "_blank")} >
-                            <Image src={`http://localhost:5000/public/document/${allValue?.images}`} alt="docs"
-                                width={215}
-                                height={55}
-                                className="mx-auto"
-                            />
-                        </div>
+                        allValue?.images?.map((item: any) => (
+                            <div>
+                                <Image src={`http://localhost:5000/public/document/${item?.image}`} alt="docs"
+                                    width={215}
+                                    height={55}
+                                    className="mx-auto"
+                                    onClick={() => window.open(`http://localhost:5000/public/document/${item?.image}`, "_blank")}
+                                />
+                                {params?.slug &&
+                                    <button className="close-icon" onClick={(e: any) => handle.deleteImages(e, item?.product_image_id)}>
+                                        x
+                                    </button>}
+                            </div>
+                        ))
                         : ""}
 
 
@@ -277,7 +290,8 @@ const AddProduct: React.FC = () => {
                     )}
                     <CenteredButton
                         className={'centered-button'}
-                        type={"submit"}
+                        type={"button"}
+                        onClick={() => handle.submit()}
                         buttonText={submit_button_text}
                     />
 
@@ -285,7 +299,7 @@ const AddProduct: React.FC = () => {
                 </form>
             </main>
             <Footer />
-        </div>
+        </div >
     );
 };
 

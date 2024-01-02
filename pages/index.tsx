@@ -7,7 +7,7 @@ import Footer from '../src/components/layout/footer';
 
 const Home = () => {
     const router = useRouter();
-    const storedUser = localStorage.getItem('user');
+    const storedUser: object | any = typeof window !== 'undefined' && localStorage.getItem('user');
 
     const userToken: any | null = typeof window !== 'undefined' && storedUser !== null
         ? JSON.parse(storedUser)
