@@ -130,14 +130,24 @@ const AddProduct: React.FC = () => {
         openModal: () => {
             setModalOpen(true);
         },
-
         imageChange: async (event: React.ChangeEvent<HTMLInputElement>) => {
-            const file: any = event.target.files?.[0];
-            setShowImage(URL.createObjectURL(file))
-            setAllValue((prevValues) => ({
-                ...prevValues,
-                document: file || null,
-            }));
+            const files: FileList | null = event.target.files;
+
+            if (files) {
+                const fileList: File[] = Array.from(files);
+
+                // Display previews for all selected files
+                const imagePreviews = fileList.map((file, index) => ({
+                    id: index,
+                    url: URL.createObjectURL(file),
+                }));
+                setShowImage(imagePreviews);
+
+                setAllValue((prevValues) => ({
+                    ...prevValues,
+                    document: fileList || [],
+                }));
+            }
         },
         deleteImages: async (event: React.ChangeEvent<HTMLInputElement>, id) => {
             event.preventDefault();
@@ -161,9 +171,12 @@ const AddProduct: React.FC = () => {
 
                 formData.append('name', allValue.productName);
                 formData.append('type', allValue.productType);
+                console.log('allValue.document', allValue.document);
 
-                if (allValue.document) {
-                    formData.append('documents', allValue.document);
+                if (allValue.document && allValue.document.length > 0) {
+                    allValue.document.map((file) => {
+                        formData.append(`documents`, file)
+                    });
                 }
                 formData.append('created_at', currentDate.toString());
                 formData.append('updated_at', currentDate.toString());
@@ -290,16 +303,19 @@ const AddProduct: React.FC = () => {
                         accept="image/*"
                         onChange={(e: any) => handle.imageChange(e)}
                         className={'centered-input mt-2'}
+                        multiple
                     />
 
                     {showImage &&
-                        <div className="signature-block" onClick={() => window.open(showImage, "_blank")} >
-                            <Image src={showImage} alt="docs"
-                                width={215}
-                                height={55}
-                                className="mx-auto"
-                            />
-                        </div>
+                        showImage?.map((item: any) => (
+                            <div className="signature-block" onClick={() => window.open(item?.url, "_blank")} >
+                                <Image src={item?.url} alt="docs"
+                                    width={215}
+                                    height={55}
+                                    className="mx-auto"
+                                />
+                            </div>
+                        ))
                     }
 
                     {allValue?.images ?
