@@ -78,3 +78,23 @@ export const deleteImage = async (id: number) => {
         toast.error(error.response?.data?.message)
     }
 }
+
+export const deleteLocation = async (id: number) => {
+    try {
+        const response = await axiosInstance.delete(`/products/location/delete/${id}`);
+        return response.data;
+    } catch (error) {
+        // Handle errors
+        toast.error(error.response?.data?.message)
+    }
+}
+
+export const getLocation = async () => {
+    try {
+        const response = await axiosInstance.get(`/locations`);
+        return response.data;
+    } catch (error) {
+        // Handle errors
+        toast.error(error.response?.data?.message)
+    }
+}

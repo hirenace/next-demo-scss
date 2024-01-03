@@ -7,21 +7,9 @@ import CenteredButton from '../../src/components/hoc/button';
 import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
 import Modal from '../../src/components/hoc/modal';
-import { deleteProduct, fetchProductData } from '../../src/services/apis';
+import { deleteProduct, fetchProductData, getLocation } from '../../src/services/apis';
 import Image from 'next/image';
 
-
-const locationArray = [{
-    location_id: 1,
-    name: 'Bensalem'
-},
-{
-    location_id: 2,
-    name: 'Ivyland'
-}, {
-    location_id: 3,
-    name: 'Crydon'
-}]
 
 let serialNumberCounter = 0;
 const Product = () => {
@@ -29,10 +17,19 @@ const Product = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [productList, setProductList] = useState<any>([]);
     const [isDeletedIds, setIsDeletedIds] = useState<number | null>(null);
+    const [locationList, setLocation] = useState<any>([]);
 
     useEffect(() => {
-        fetchProduct()
+        fetchProduct();
+        getAllLocation();
     }, [])
+
+    const getAllLocation = async () => {
+        let response = await getLocation();
+        if (response) {
+            setLocation(response)
+        }
+    }
 
     const fetchProduct = async () => {
         const getProduct: any = await fetchProductData()
@@ -72,7 +69,7 @@ const Product = () => {
                 <div>
                     {
                         params.value.map((location) => {
-                            const matchingLocation = locationArray.find(
+                            const matchingLocation = locationList.find(
                                 (item) => item.location_id === location.location_id
                             );
 

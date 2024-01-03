@@ -8,7 +8,6 @@ interface CenteredInputProps {
     onChange: (value: any, name: string) => void;
     className: string;
     accept?: string
-    multiple?: boolean
 }
 
 const CenteredInput: React.FC<CenteredInputProps> = (props) => {
@@ -22,7 +21,6 @@ const CenteredInput: React.FC<CenteredInputProps> = (props) => {
             onChange={(e) => onChange(e, name)}
             className={className}
             accept={accept}
-            multiple
         />
     );
 };
