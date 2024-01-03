@@ -348,12 +348,10 @@ const AddProduct: React.FC = () => {
                         onClick={() => handle.submit()}
                         buttonText={submit_button_text}
                     />
-
-
                 </form>
 
                 {isModalOpen &&
-                    <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>{modal_title}</h2>} onSubmit={handle.submit}>
+                    <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>{modal_title}</h2>} onSubmit={handle.deleteLocation}>
                         <p>{modal_text}</p>
                     </Modal>
                 }
