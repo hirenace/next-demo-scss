@@ -15,7 +15,6 @@ interface CustomError {
     message: string;
 }
 
-// Create a function that makes a GET request using the axiosInstance
 export const fetchProductData = async () => {
     try {
         const response = await axiosInstance.get('/products');
@@ -26,7 +25,6 @@ export const fetchProductData = async () => {
     }
 }
 
-// Create a function that makes a POST request using the axiosInstance
 export const addProduct = async (body: any) => {
     try {
         const multipartAxiosInstance = createAxiosInstance(true); // Set flag to true for addProduct
