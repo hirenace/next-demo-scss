@@ -1,4 +1,3 @@
-// CenteredButton.tsx
 import React from 'react';
 
 interface CenteredButtonProps {

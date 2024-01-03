@@ -9,9 +9,10 @@ const Home = () => {
     const router = useRouter();
     const storedUser: object | any = typeof window !== 'undefined' && localStorage.getItem('user');
 
-    const userToken: any | null = typeof window !== 'undefined' && storedUser !== null
+    const userToken: object | null = storedUser !== null
         ? JSON.parse(storedUser)
         : null;
+
     useEffect(() => {
         if (userToken === null) {
             return router.push('/auth/login');

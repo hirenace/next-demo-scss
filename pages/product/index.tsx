@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { toast } from "react-toastify";
 import CenteredButton from '../../src/components/hoc/button';
@@ -8,16 +9,43 @@ import Footer from '../../src/components/layout/footer';
 import Header from '../../src/components/layout/header';
 import Modal from '../../src/components/hoc/modal';
 import { deleteProduct, fetchProductData, getLocation } from '../../src/services/apis';
-import Image from 'next/image';
+import globalMessages from '../../src/utils/globalization';
 
+// Define types for your data structure
+interface ProductLocation {
+    product_location_id: number;
+    product_id: number;
+    location_id: number;
+    price: string;
+    quantity: number;
+}
 
-let serialNumberCounter = 0;
+interface ProductImage {
+    product_image_id: number;
+    product_id: number;
+    image: string;
+}
+
+interface Product {
+    product_id: number;
+    name: string;
+    type: string;
+    status: boolean;
+    created_at: string;
+    updated_at: string;
+    locations: ProductLocation[];
+    images: ProductImage[];
+    id: number;
+}
+
 const Product = () => {
     const router = useRouter()
     const [isModalOpen, setModalOpen] = useState(false);
-    const [productList, setProductList] = useState<any>([]);
+    const [productList, setProductList] = useState<Product[] | any>([]);
     const [isDeletedIds, setIsDeletedIds] = useState<number | null>(null);
     const [locationList, setLocation] = useState<any>([]);
+
+    const { modal_text, modal_title } = globalMessages;
 
     useEffect(() => {
         fetchProduct();
@@ -46,14 +74,14 @@ const Product = () => {
             },
         },
         {
-            field: 'images', headerName: 'Image', width: 80, sortable: false,
+            field: 'images', headerName: 'Image', width: 90, sortable: false,
             renderCell: (params) => (
                 <div className="signature-block">{
                     params?.value[0]?.image ?
-                        <Image src={`http://localhost:5000/public/document/${params?.value[0]?.image}`} alt="docs"
-                            onClick={() => window.open(`http://localhost:5000/public/document/${params?.value[0]?.image}`, "_blank")}
-                            width={55}
-                            height={55}
+                        <Image src={process.env.NEXT_PUBLIC_IMAGE + params?.value[0]?.image} alt="docs"
+                            onClick={() => window.open(process.env.NEXT_PUBLIC_IMAGE + params?.value[0]?.image, "_blank")}
+                            width={80}
+                            height={80}
                             className="mx-auto"
                         /> : '-'}
                 </div>
@@ -64,6 +92,7 @@ const Product = () => {
         {
             field: 'locations',
             headerName: 'Locations',
+            sortable: false,
             width: 300,
             renderCell: (params) => (
                 <div>
@@ -89,9 +118,9 @@ const Product = () => {
             sortable: false,
             width: 150,
             renderCell: (params) => (
-                <div>
-                    <button className={'edit-button'} onClick={() => handle.edit(params.row)}>Edit</button>
-                    <button className={'delete-button'} onClick={() => handle.delete(params.row)}>Delete</button>
+                <div className='d-flex'>
+                    <CenteredButton className={'edit-button'} onClick={() => handle.edit(params.row)} type={"button"} buttonText={"Edit"} />
+                    <CenteredButton className={'delete-button'} onClick={() => handle.delete(params.row)} type={"button"} buttonText={"Delete"} />
                 </div>
             ),
         },
@@ -99,16 +128,14 @@ const Product = () => {
 
     const handle = {
         submit: async () => {
-            // Handle the submit action here
             const deletedProduct: any = await deleteProduct(Number(isDeletedIds))
             if (deletedProduct) {
                 toast.success(deletedProduct?.message);
                 setProductList(productList?.filter(item => item.id !== isDeletedIds))
-                handle.closeModal(); // You can close the modal after submitting if needed
+                handle.closeModal(); // You can close the modal after submitting
             }
         },
         edit: (row) => {
-            // Handle edit action
             router.push(`/product/form/${row?.id}`)
         },
         delete: (row) => {
@@ -142,8 +169,8 @@ const Product = () => {
             </main>
             <Footer />
             {isModalOpen &&
-                <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>Confirm!</h2>} onSubmit={handle.submit}>
-                    <p>Are you sure? You want to delete this record</p>
+                <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>{modal_title}</h2>} onSubmit={handle.submit}>
+                    <p>{modal_text}</p>
                 </Modal>
             }
         </div >

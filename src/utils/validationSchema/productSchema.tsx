@@ -1,11 +1,6 @@
-// validationSchema.ts
-import * as yup from 'yup';
+// Validation rules for product details
 
-interface Location {
-  name: string;
-  price: number;
-  quantity: number;
-}
+import * as yup from 'yup';
 
 const productSchema = yup.object().shape({
   productName: yup.string().required('Product Name is required'),

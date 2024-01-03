@@ -8,15 +8,16 @@ import CenteredInput from '../../../src/components/hoc/input';
 import CenteredButton from '../../../src/components/hoc/button';
 import globalMessages from '../../../src/utils/globalization';
 import productSchema from '../../../src/utils/validationSchema/productSchema';
-import { addProduct, deleteImage, deleteLocation, editProduct, getLocation, getParticularProduct } from '../../../src/services/apis';
+import {
+    addProduct,
+    deleteImage,
+    deleteLocation,
+    editProduct,
+    getLocation,
+    getParticularProduct,
+} from '../../../src/services/apis';
 import Image from 'next/image';
 import Modal from '../../../src/components/hoc/modal';
-
-interface Location {
-    location_id: string;
-    price: number;
-    quantity: number;
-}
 
 interface FormValues {
     productName: string;
@@ -32,6 +33,7 @@ const AddProduct: React.FC = () => {
 
     const params = useParams()
     const { title, name_placeholder, product_type, locations_place, location_price, location_quantity, add_location_btn, delete_location_btn, submit_button_text } = globalMessages?.product_form;
+    const { modal_text, modal_title } = globalMessages;
     const [showImage, setShowImage] = useState<any>();
 
     const [isModalOpen, setModalOpen] = useState(false);
@@ -78,7 +80,7 @@ const AddProduct: React.FC = () => {
     }
 
     const handle = {
-        onChangeField: (value: any, name: string) => {
+        onChangeField: (value: string | number, name: string) => {
             setAllValue((prevValues) => ({
                 ...prevValues,
                 [name]: value,
@@ -90,19 +92,16 @@ const AddProduct: React.FC = () => {
                 locations: [...prevValues.locations, { location_id: '', price: null, quantity: null }],
             }));
         },
-        locationDelete: (product_location_id: number, indexToDelete) => {
+        locationDelete: (product_location_id: number, indexToDelete: number) => {
             if (product_location_id) {
-
                 setIsDeletedIds(product_location_id)
                 handle.openModal()
-
             } else {
                 setAllValue((prevValues) => ({
                     ...prevValues,
                     locations: prevValues.locations.filter((_, index) => index !== indexToDelete),
                 }));
             }
-
         },
         deleteLocation: async () => {
             if (isDeletedIds) {
@@ -123,7 +122,6 @@ const AddProduct: React.FC = () => {
                 ),
             }));
         },
-
         closeModal: () => {
             setModalOpen(false);
         },
@@ -154,11 +152,11 @@ const AddProduct: React.FC = () => {
             if (params?.slug) {
                 let response = await deleteImage(Number(id))
                 if (response) {
-                    allValue?.images?.filter((item: any) => item.product_image_id !== id)
+                    allValue?.images?.filter((item: { product_image_id: number; }) => item.product_image_id !== id)
                     toast.success('Image deleted successfully.')
                     setAllValue(() => ({
                         ...allValue,
-                        images: allValue?.images?.filter((item: any) => item.product_image_id !== id),
+                        images: allValue?.images?.filter((item: { product_image_id: number; }) => item.product_image_id !== id),
                     }));
                 }
             }
@@ -171,7 +169,6 @@ const AddProduct: React.FC = () => {
 
                 formData.append('name', allValue.productName);
                 formData.append('type', allValue.productType);
-                console.log('allValue.document', allValue.document);
 
                 if (allValue.document && allValue.document.length > 0) {
                     allValue.document.map((file) => {
@@ -301,7 +298,7 @@ const AddProduct: React.FC = () => {
                         placeholder={"Image:"}
                         name={'document'}
                         accept="image/*"
-                        onChange={(e: any) => handle.imageChange(e)}
+                        onChange={(e) => handle.imageChange(e)}
                         className={'centered-input mt-2'}
                         multiple
                     />
@@ -319,13 +316,13 @@ const AddProduct: React.FC = () => {
                     }
 
                     {allValue?.images ?
-                        allValue?.images?.map((item: any) => (
+                        allValue?.images?.map((item: { image: string; product_image_id: any; }) => (
                             <div>
-                                <Image src={`http://localhost:5000/public/document/${item?.image}`} alt="docs"
+                                <Image src={process.env.NEXT_PUBLIC_IMAGE + item?.image} alt="docs"
                                     width={215}
                                     height={55}
                                     className="mx-auto"
-                                    onClick={() => window.open(`http://localhost:5000/public/document/${item?.image}`, "_blank")}
+                                    onClick={() => window.open(`${process.env.NEXT_PUBLIC_IMAGE + item?.image}`, "_blank")}
                                 />
                                 {params?.slug &&
                                     <button className="close-icon" onClick={(e: any) => handle.deleteImages(e, item?.product_image_id)}>
@@ -356,8 +353,8 @@ const AddProduct: React.FC = () => {
                 </form>
 
                 {isModalOpen &&
-                    <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>Confirm!</h2>} onSubmit={handle.deleteLocation}>
-                        <p>Are you sure? You want to delete this location</p>
+                    <Modal isOpen={isModalOpen} onClose={handle.closeModal} header={<h2>{modal_title}</h2>} onSubmit={handle.submit}>
+                        <p>{modal_text}</p>
                     </Modal>
                 }
             </main>

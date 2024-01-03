@@ -18,7 +18,7 @@ const Login = () => {
     // Destructuring object
     const { title, username_placeholder, password_placeholder, login_button_text } = globalMessages?.login_form;
 
-    const storedUser: any = typeof window !== 'undefined' && localStorage.getItem('user');
+    const storedUser: object | string = typeof window !== 'undefined' && localStorage.getItem('user');
 
     const userToken: any | null = storedUser !== null
         ? JSON.parse(storedUser)
@@ -36,7 +36,7 @@ const Login = () => {
     }, []);
 
     const handle = {
-        onChangeField: (value: any, name: any) => {
+        onChangeField: (value: string, name: string) => {
             setAllValue((prevValues) => ({
                 ...prevValues,
                 [name]: value,

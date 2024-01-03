@@ -1,4 +1,6 @@
 const globalMessages = {
+    modal_title: "Confirm!",
+    modal_text: "Are you sure? You want to delete this record?",
     login_form: {
         title: "Login",
         username_placeholder: "Username",
